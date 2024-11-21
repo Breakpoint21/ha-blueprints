@@ -67,40 +67,31 @@ trigger:
   
 action:
   - variables:
-      button: '{{ trigger.event.data.endpoint_id }}'
-      cmd: '{{ trigger.event.data.command }}'
-      args: '{{ trigger.event.data.args }}'
+      button: '{{ (trigger.event.data.event / 1000) | int }}'
+      action: '{{ trigger.event.data.event % 10 }}'
   - choose:
       - conditions:
-          - "{{ button == 1 and cmd == 'on' }}"
+          - "{{ button == 1 and action == 2 }}"
         sequence: !input "on_button_1_short"
       - conditions:
-          - "{{ button == 1 and cmd == 'off' }}"
+          - "{{ button == 2 and action == 2 }}"
         sequence: !input "off_button_1_short"
       - conditions:
-          - "{{ button == 1 and cmd == 'move_with_on_off' }}"
-        sequence:
-          - if:
-              - condition:
-                - '{{ args[11] == "U" }}'
-            then: 
-                !input "on_button_1_long"
-            else:
-                !input "off_button_1_long"
-
-      - conditions:
-          - "{{ button == 2 and cmd == 'on' }}"
+          - "{{ button == 3 and action == 2 }}"
         sequence: !input "on_button_2_short"
       - conditions:
-          - "{{ button == 2 and cmd == 'off' }}"
+          - "{{ button == 4 and action == 2 }}"
         sequence: !input "off_button_2_short"
+      
       - conditions:
-          - "{{ button == 2 and cmd == 'move_with_on_off' }}"
-        sequence:
-          - if:
-              - condition:
-                - '{{ args[11] == "U" }}'
-            then: 
-                !input "on_button_2_long"
-            else:
-                !input "off_button_2_long"
+          - "{{ button == 1 and action == 1 }}"
+        sequence: !input "on_button_1_long"
+      - conditions:
+          - "{{ button == 2 and action == 1 }}"
+        sequence: !input "off_button_1_long"
+      - conditions:
+          - "{{ button == 3 and action == 1 }}"
+        sequence: !input "on_button_2_long"
+      - conditions:
+          - "{{ button == 4 and action == 1 }}"
+        sequence: !input "off_button_2_long"
