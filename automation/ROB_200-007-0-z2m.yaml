@@ -12,6 +12,13 @@ blueprint:
         entity:
           integration: mqtt
           domain: sensor
+    controller_entity:
+      name: (Zigbee2MQTT) Controller Entity
+      description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
+      default: ''
+      selector:
+        entity:
+          domain: sensor
           
     on_button_1_short:
       name: On button 1 - short
@@ -123,7 +130,7 @@ trigger:
   - platform: event
     event_type: state_changed
     event_data:
-      entity_id: !input "remote"
+      entity_id: !input controller_entity
 action:
   - variables:
       command: "{{ trigger.to_state.state }}"
