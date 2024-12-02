@@ -123,7 +123,7 @@ trigger:
   - platform: event
     event_type: state_changed
     event_data:
-      entity_id: !input controller_entity
+      entity_id: !input "remote"
 action:
   - variables:
       command: "{{ trigger.to_state.state }}"
