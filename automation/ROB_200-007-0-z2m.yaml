@@ -1,5 +1,5 @@
 blueprint:
-  name: ROBB ROB_200-007-0 Zigbee2Mqtt
+  name: ROBB ROB_200-007-0 general use
   description: "This blueprint is for the ROBB ROB_200-007-0 dimmer switch when used with zigbee2mqtt.
   It is for genral use so all buttons can be connected to any action of your choice.
   Make sure to select the correct sensor for the remote."
@@ -11,13 +11,6 @@ blueprint:
       selector:
         entity:
           integration: mqtt
-          domain: sensor
-    controller_entity:
-      name: (Zigbee2MQTT) Controller Entity
-      description: The action sensor of the controller to use for the automation. Choose a value only if the remote is integrated with Zigbee2MQTT.
-      default: ''
-      selector:
-        entity:
           domain: sensor
           
     on_button_1_short:
@@ -124,13 +117,12 @@ blueprint:
       selector:
         action: {}
         
-mode: restart
+mode: parallel
 max_exceeded: silent
 trigger:
-  - platform: event
-    event_type: state_changed
-    event_data:
-      entity_id: !input controller_entity
+  - platform: state
+    entity_id: !input "remote"
+    attribute: action
 action:
   - variables:
       command: "{{ trigger.to_state.state }}"
